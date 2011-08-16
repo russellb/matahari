@@ -12,6 +12,9 @@ if(WITH-QMF)
     add_executable(${QMF_AGENT} ${BASE}-qmf.cpp ${SCHEMA_SOURCES})
     target_link_libraries(${QMF_AGENT} ${BASE_LIB} mcommon_qmf)
 
+    add_executable(host-qmf-schematest host-qmf-schematest.cpp)
+    target_link_libraries(host-qmf-schematest mcommon_qmf)
+
     if(NOT WIN32)
         configure_file(${CMAKE_SOURCE_DIR}/matahari.init.in ${CMAKE_CURRENT_BINARY_DIR}/matahari-${BASE})
         install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/matahari-${BASE} DESTINATION ${initdir})

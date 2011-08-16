@@ -43,7 +43,7 @@ else(WIN32)
 endif(WIN32)
 
 if(WITH-QMF)
-    add_library (mcommon_qmf SHARED mh_agent.cpp)
+    add_library (mcommon_qmf SHARED mh_agent.cpp qmf_utils.cpp)
     set_target_properties(mcommon_qmf PROPERTIES SOVERSION 1.0.0)
 
     target_link_libraries(mcommon_qmf mcommon ${QPIDCOMMON_LIBRARY} ${QPIDCLIENT_LIBRARY} ${QPIDMESSAGING_LIBRARY} ${QMF2_LIBRARY})
