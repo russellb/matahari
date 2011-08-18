@@ -100,6 +100,7 @@ int main(int argc, char** argv)
         case CONSOLE_AGENT_ADD:
         {
             Agent agent;
+            Schema schema;
 
             agent = event.getAgent();
 
@@ -115,9 +116,12 @@ int main(int argc, char** argv)
                 for (unsigned int j = 0; j < agent.getSchemaIdCount(package); j++) {
                     SchemaId id = agent.getSchemaId(package, j);
 
-                    cout << "--------> Schema: " << id.getName() << endl;
+                    cout << "--------> Schema: " << id.getName() << " " << id.getType() << endl;
 
                     Schema s(agent.getSchema(id, qpid::messaging::Duration::MINUTE));
+                    if (j == 0) {
+                        schema = s;
+                    }
 
                     cout << "----------> Properties: " << endl;
                     for (unsigned int k = 0; k < s.getPropertyCount(); k++) {
@@ -133,24 +137,33 @@ int main(int argc, char** argv)
                 }
             }
 
+            //qmf::Schema s(agent.getSchema(qmf::SchemaId(qmf::SCHEMA_TYPE_DATA, "org.matahariproject", "Host")));
+
             cout << "schema_has_property(org.matahariproject, Host, hostname): " \
                 << matahari::qmf::schema_has_property(agent, "org.matahariproject", "Host", "hostname") \
                 << endl;
+            cout << "schema.getProperty(): " << schema.getProperty("hostname") << endl;
             cout << "schema_has_property(org.matahariproject, Host, foo): " \
                 << matahari::qmf::schema_has_property(agent, "org.matahariproject", "Host", "foo") \
                 << endl;
+            cout << "schema.getProperty(): " << schema.getProperty("foo") << endl;
             cout << "schema_has_method(org.matahariproject, Host, reboot): " \
                 << matahari::qmf::schema_has_method(agent, "org.matahariproject", "Host", "reboot") \
                 << endl;
+            cout << "schema.getMethod(): " << schema.getMethod("reboot") << endl;
             cout << "schema_has_method(org.matahariproject, Host, foo): " \
                 << matahari::qmf::schema_has_method(agent, "org.matahariproject", "Host", "foo") \
                 << endl;
+            cout << "schema.getMethod(): " << schema.getMethod("foo") << endl;
             cout << "schema_method_has_arg(org.matahariproject, Host, get_uuid, lifetime): " \
                 << matahari::qmf::schema_method_has_arg(agent, "org.matahariproject", "Host", "get_uuid", "lifetime") \
                 << endl;
+            qmf::SchemaMethod method(schema.getMethod("get_uuid"));
+            cout << "method.getArgument(): " << method.getArgument("lifetime") << endl;
             cout << "schema_method_has_arg(org.matahariproject, Host, get_uuid, foo): " \
                 << matahari::qmf::schema_method_has_arg(agent, "org.matahariproject", "Host", "get_uuid", "foo") \
                 << endl;
+            cout << "method.getArgument(): " << method.getArgument("foo") << endl;
 
             break;
         }
